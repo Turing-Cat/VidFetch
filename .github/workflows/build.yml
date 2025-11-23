@@ -68,11 +68,10 @@ jobs:
           
           # Skip vue-tsc check as it was causing issues locally
           build_script_name: build-skip-tsc
-        env:
+        # env:
           # macOS code signing (if you have certificates)
           # MAC_CERTS: ${{ secrets.MAC_CERTS }}
           # MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
           # Windows code signing
           # WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
           # WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-          pass
