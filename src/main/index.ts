@@ -81,7 +81,7 @@ app.whenReady().then(async () => {
   })
 
   // IPC Handlers
-  ipcMain.handle('download-video', async (_, { url, format, quality, outputFolder }) => {
+  ipcMain.handle('download-video', async (_, { url, format, quality, outputFolder, cookiesPath }) => {
     try {
       const outputTemplate = join(outputFolder, '%(title)s.%(ext)s')
       const ffmpegPath = resolveFfmpegPath()
@@ -105,6 +105,10 @@ app.whenReady().then(async () => {
         noPlaylist: true,
       }
 
+      if (cookiesPath) {
+        flags.cookies = cookiesPath
+      }
+
       if (format === 'mp3') {
         flags.extractAudio = true
         flags.audioFormat = 'mp3'
@@ -124,9 +128,15 @@ app.whenReady().then(async () => {
       console.log(`Downloading ${url} to ${outputTemplate} with flags:`, flags)
       
       // Determine binary path based on environment
-      const ytDlpBinaryPath = is.dev
-        ? undefined
-        : join(process.resourcesPath, 'bin', process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp')
+      let ytDlpBinaryPath: string | undefined
+      if (is.dev) {
+        const localBin = join(__dirname, '../../local_bin/yt-dlp')
+        if (existsSync(localBin)) {
+          ytDlpBinaryPath = localBin
+        }
+      } else {
+        ytDlpBinaryPath = join(process.resourcesPath, 'bin', process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp')
+      }
 
       console.log('Using yt-dlp binary at:', ytDlpBinaryPath || 'default (node_modules)')
       console.log('Using ffmpeg at:', ffmpegPath || 'system PATH')
@@ -179,6 +189,18 @@ app.whenReady().then(async () => {
   ipcMain.handle('select-folder', async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog({
       properties: ['openDirectory']
+    })
+    if (canceled) {
+      return null
+    } else {
+      return filePaths[0]
+    }
+  })
+
+  ipcMain.handle('select-file', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: [{ name: 'Text Files', extensions: ['txt'] }]
     })
     if (canceled) {
       return null

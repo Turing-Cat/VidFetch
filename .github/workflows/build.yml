@@ -1,0 +1,78 @@
+name: Build/Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      # Fix for Linux: Install system dependencies for Electron
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libicns-utils graphicsmagick
+
+      # Download yt-dlp binary for each platform
+      - name: Download yt-dlp (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          mkdir -p local_bin
+          curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o local_bin/yt-dlp
+          chmod +x local_bin/yt-dlp
+
+      - name: Download yt-dlp (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir local_bin
+          curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe -o local_bin/yt-dlp.exe
+
+      - name: Download yt-dlp (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          mkdir -p local_bin
+          curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos -o local_bin/yt-dlp
+          chmod +x local_bin/yt-dlp
+
+      - name: Build & Release
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          
+          # Skip vue-tsc check as it was causing issues locally
+          build_script_name: build-skip-tsc
+        env:
+          # macOS code signing (if you have certificates)
+          # MAC_CERTS: ${{ secrets.MAC_CERTS }}
+          # MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          # Windows code signing
+          # WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          # WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          pass

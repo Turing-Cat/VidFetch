@@ -3,9 +3,10 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
-  downloadVideo: (params: { url: string; format: string; quality: string; outputFolder: string }) => 
+  downloadVideo: (params: { url: string; format: string; quality: string; outputFolder: string; cookiesPath?: string }) => 
     ipcRenderer.invoke('download-video', params),
   selectFolder: () => ipcRenderer.invoke('select-folder'),
+  selectFile: () => ipcRenderer.invoke('select-file'),
   getDefaultDownloadPath: () => ipcRenderer.invoke('get-default-download-path'),
   onDownloadProgress: (callback: (progress: number) => void) => 
     ipcRenderer.on('download-progress', (_, progress) => callback(progress))

@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 
 const videoUrl = ref('')
 const downloadPath = ref('')
+const cookiesPath = ref('')
 const selectedQuality = ref('best')
 const selectedFormat = ref('mp4')
 const isDownloading = ref(false)
@@ -30,6 +31,13 @@ const handleSelectFolder = async () => {
   }
 }
 
+const handleSelectCookies = async () => {
+  const path = await (window as any).api.selectFile()
+  if (path) {
+    cookiesPath.value = path
+  }
+}
+
 const handleDownload = async () => {
   if (!videoUrl.value) {
     statusMessage.value = '请输入视频链接'
@@ -47,7 +55,8 @@ const handleDownload = async () => {
       url: videoUrl.value,
       format: selectedFormat.value,
       quality: selectedQuality.value,
-      outputFolder: downloadPath.value
+      outputFolder: downloadPath.value,
+      cookiesPath: cookiesPath.value
     })
     
     if (result.success) {
@@ -113,6 +122,14 @@ const handleDownload = async () => {
         <div class="input-wrapper">
           <input v-model="downloadPath" type="text" readonly />
           <button class="folder-btn" @click="handleSelectFolder">📂</button>
+        </div>
+      </section>
+
+      <section class="path-section">
+        <label>Cookies 文件 (可选, 用于解决 YouTube 登录/Bot 问题)</label>
+        <div class="input-wrapper">
+          <input v-model="cookiesPath" type="text" placeholder="选择 cookies.txt..." readonly />
+          <button class="folder-btn" @click="handleSelectCookies">🍪</button>
         </div>
       </section>
 
