@@ -1,0 +1,88 @@
+{
+  "name": "vidfetch",
+  "version": "1.0.0",
+  "description": "A GUI for yt-dlp",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build && electron-builder",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "electron",
+    "vue",
+    "yt-dlp",
+    "downloader"
+  ],
+  "author": "VidFetch Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.0",
+    "sass": "^1.70.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6",
+    "vue": "^3.4.0",
+    "vue-tsc": "^1.8.0"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0",
+    "ffmpeg-static": "^5.3.0",
+    "fix-path": "^4.0.0",
+    "yt-dlp-exec": "^1.0.0"
+  },
+  "build": {
+    "appId": "com.vidfetch.app",
+    "productName": "VidFetch",
+    "directories": {
+      "output": "release/${version}"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "node_modules/yt-dlp-exec/bin",
+        "to": "bin",
+        "filter": [
+          "yt-dlp",
+          "yt-dlp.exe"
+        ]
+      },
+      {
+        "from": "node_modules/ffmpeg-static",
+        "to": "bin",
+        "filter": [
+          "ffmpeg",
+          "ffmpeg.exe"
+        ]
+      }
+    ],
+    "mac": {
+      "artifactName": "${productName}_${version}_${arch}.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}_${version}_${arch}.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "artifactName": "${productName}_${version}_${arch}.${ext}"
+    }
+  }
+}

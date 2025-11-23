@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GUI 视频下载程序</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#3713ec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#131022",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "Noto Sans SC", "sans-serif"]
+            },
+            borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
+</head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 sm:px-10 md:px-20 lg:px-40 flex flex-1 justify-center py-10 sm:py-20">
+<div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1 gap-8">
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between gap-3 p-4">
+<div class="flex flex-col gap-3">
+<h1 class="text-gray-900 dark:text-white text-4xl font-bold leading-tight tracking-[-0.033em]">视频下载器</h1>
+<p class="text-gray-600 dark:text-[#a19db9] text-base font-normal leading-normal">将 YouTube, Bilibili 或其他支持的链接粘贴至此进行下载</p>
+</div>
+</div>
+<!-- URL Input -->
+<div class="flex flex-col gap-4 px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">视频链接 (Video Link)</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3f3b54] bg-white dark:bg-[#1d1c27] focus:border-primary dark:focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-[#a19db9] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" placeholder="在此粘贴视频链接..."/>
+<div class="text-gray-500 dark:text-[#a19db9] flex border border-gray-300 dark:border-[#3f3b54] bg-white dark:bg-[#1d1c27] items-center justify-center px-4 rounded-r-lg border-l-0">
+<span class="material-symbols-outlined" style="font-size: 24px;">link</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Section Header -->
+<h3 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">下载选项 (Download Options)</h3>
+<!-- Download Options -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6 px-4 py-3">
+<div class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">清晰度 (Quality)</p>
+<div class="relative w-full">
+<select class="form-select appearance-none w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3f3b54] bg-white dark:bg-[#1d1c27] focus:border-primary dark:focus:border-primary h-14 p-[15px] text-base font-normal leading-normal">
+<option>最佳 (Best)</option>
+<option>1080p</option>
+<option>720p</option>
+<option>480p</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 dark:text-[#a19db9]">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">格式 (Format)</p>
+<div class="relative w-full">
+<select class="form-select appearance-none w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3f3b54] bg-white dark:bg-[#1d1c27] focus:border-primary dark:focus:border-primary h-14 p-[15px] text-base font-normal leading-normal">
+<option>MP4 (视频)</option>
+<option>WEBM (视频)</option>
+<option>MP3 (纯音频)</option>
+<option>M4A (纯音频)</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 dark:text-[#a19db9]">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Save Path -->
+<div class="flex flex-col gap-4 px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">保存至 (Save to)</p>
+<div class="flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3f3b54] bg-white dark:bg-[#1d1c27] focus:border-primary dark:focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-[#a19db9] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" readonly="" value="/Users/username/Downloads"/>
+<button class="text-white flex border border-primary bg-primary items-center justify-center px-4 rounded-r-lg border-l-0 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">folder_open</span>
+</button>
+</div>
+</label>
+</div>
+<!-- Action Button -->
+<div class="flex flex-col items-start px-4 pt-6 pb-3">
+<button class="flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 text-center text-base font-bold text-white shadow-sm transition-all hover:bg-primary/90 focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:bg-primary/50 disabled:opacity-70">
+<span class="material-symbols-outlined">download</span>
+<span>开始下载 (Start Download)</span>
+</button>
+</div>
+<!-- Progress & Status -->
+<div class="flex flex-col gap-4 px-4 py-3">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+<span>正在下载: "宇宙中最令人惊奇的事实"</span>
+<span>42%</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+<div class="bg-primary h-2.5 rounded-full" style="width: 42%"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 p-3 rounded-lg bg-green-500/10">
+<span class="material-symbols-outlined">check_circle</span>
+<span>下载完成！文件已保存至 Downloads 文件夹。</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 p-3 rounded-lg bg-red-500/10">
+<span class="material-symbols-outlined">error</span>
+<span>错误：链接无效或不支持该网站。</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

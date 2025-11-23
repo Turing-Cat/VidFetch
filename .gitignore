@@ -1,0 +1,10 @@
+node_modules
+dist
+release
+.DS_Store
+.idea
+.vscode
+*.log
+.env
+.env.*.local
+local_bin/
