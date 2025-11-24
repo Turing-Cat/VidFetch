@@ -32,7 +32,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libicns-utils graphicsmagick
+          sudo apt-get install -y icnsutils graphicsmagick
 
       # Download yt-dlp binary for each platform
       - name: Download yt-dlp (Linux)
